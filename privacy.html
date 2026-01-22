@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* REUSING THE SAME CSS VARIABLES AND STYLES AS TERMS PAGE */
+        /* Define CSS variables and styles here to match the Terms page design for consistency */
         :root {
             --bg-dark: #0f172a;
             --text-primary: #f8fafc;
@@ -49,7 +49,9 @@
             font-size: 3rem;
             margin-bottom: 10px;
             background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .last-updated { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 40px; display: block; }
