@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitFusion360 | Engineered Health</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="./img/fit-fusion-logo.png" type="image/png">
+    
+    <style>
+        :root {
+            /* LANDING PAGE THEME */
+            --bg-dark: #0f172a;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #06b6d4;      
+            --accent-purple: #6366f1; 
+            
+            /* APP THEME (Light - Matched to your code) */
+            --app-bg: #F9FAFB;
+            --app-card: #FFFFFF;
+            --app-text: #111827;
+            --app-text-sub: #6B7280;
+            --app-primary: #2563EB;
+            --app-success: #10B981;
+            --app-warning: #F59E0B;
+            --app-purple: #8B5CF6;
+            
+            /* Updated Dimensions for 20:9 Aspect Ratio */
+            /* Scaled 0.42x results in visual size ~361px x 722px */
+            --phone-width: 860px;
+            --phone-height: 1720px; 
+            
+            /* Modern Android Geometry */
+            --phone-radius: 55px;  /* Tighter, modern corners */
+            --screen-radius: 42px; /* Matches chassis curvature */
+            --border-thick: 18px;  /* Uniform bezel thickness */
+            --cam-size: 26px;      /* Punch-hole diameter */
+            
+            /* Android Hardware Colors */
+            --frame-color: #1e293b; /* Matte Obsidian/Charcoal */
+            --btn-color: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- BACKGROUND --- */
+        .bg-blobs { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 20s infinite alternate; }
+        .blob-1 { width: 500px; height: 500px; background: var(--accent-purple); top: -100px; left: -100px; }
+        .blob-2 { width: 600px; height: 600px; background: var(--accent); bottom: -100px; right: -100px; animation-delay: -5s; }
+        .blob-3 { width: 300px; height: 300px; background: #ec4899; top: 40%; left: 30%; opacity: 0.2; animation-duration: 30s; }
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { font-family: 'Oswald', sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+        h1 {
+            font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1.1; margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 50%, var(--accent) 100%);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(6,182,212,0.3));
+        }
+        h2 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; color: var(--accent); text-shadow: 0 0 20px rgba(6,182,212,0.2); }
+        p { font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+        /* --- LAYOUT --- */
+        .container { display: flex; position: relative; max-width: 1400px; margin: 0 auto; flex: 1; }
+        .content-column { width: 50%; padding: 0 6%; z-index: 10; position: relative; }
+
+        section {
+            min-height: auto; padding: 80px 0;
+            display: flex; flex-direction: column; justify-content: center;
+            opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        .logo-img { width: 140px; margin-bottom: 2rem; filter: drop-shadow(0 0 25px rgba(6,182,212,0.6)); }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); padding: 25px; border-radius: 20px;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); margin-bottom: 20px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .glass-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.3); }
+
+        .value-matrix {
+            display: flex; gap: 10px; margin-bottom: 30px; font-size: 0.9rem; font-family: 'Inter', monospace;
+            color: var(--accent); background: rgba(6, 182, 212, 0.1);
+            padding: 15px; border-radius: 8px; border-left: 3px solid var(--accent);
+        }
+        .vm-item { display: flex; flex-direction: column; }
+        .vm-label { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; }
+        .comparison-table th { text-align: left; padding: 15px; color: var(--accent); border-bottom: 2px solid rgba(255,255,255,0.1); }
+        .comparison-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); color: var(--text-secondary); }
+        .comparison-table td:first-child { color: #fff; font-weight: 600; }
+        .comparison-table .check { color: var(--success); }
+        .comparison-table .cross { color: #ef4444; opacity: 0.5; }
+
+        .data-flow {
+            display: flex; align-items: center; gap: 15px; margin: 20px 0;
+            background: rgba(0,0,0,0.2); padding: 20px; border-radius: 12px;
+        }
+        .df-step { text-align: center; flex: 1; }
+        .df-icon { font-size: 1.5rem; margin-bottom: 10px; color: var(--text-primary); }
+        .df-arrow { color: var(--text-secondary); font-size: 0.8rem; }
+        .df-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .feature-list { list-style: none; }
+        .feature-item { display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start; }
+        .feature-icon { 
+            background: rgba(255,255,255,0.1); color: var(--accent); width: 40px; height: 40px; 
+            border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .feature-text strong { color: #fff; display: block; font-size: 1rem; }
+        .feature-text span { font-size: 0.9rem; color: var(--text-secondary); }
+
+        .trust-bar {
+            display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;
+        }
+        .trust-item { font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+        .trust-icon { color: var(--success); }
+
+        .btn-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; align-items: center; }
+        .btn {
+            padding: 16px 32px; border-radius: 12px; text-decoration: none; font-weight: 700;
+            font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; border: none; font-family: 'Inter', sans-serif; justify-content: center;
+        }
+        .btn-primary { background: var(--accent); color: #0f172a; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3); flex: 2; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(6, 182, 212, 0.5); }
+        .btn-secondary { background: transparent; border: 1px solid var(--text-secondary); color: var(--text-secondary); flex: 1; font-size: 0.9rem; padding: 16px 20px; }
+        .btn-secondary:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+
+        .tag {
+            display: inline-block; padding: 4px 12px; border-radius: 50px; 
+            font-size: 0.75rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px;
+        }
+        .tag-blue { background: rgba(6, 182, 212, 0.2); color: var(--accent); border: 1px solid rgba(6, 182, 212, 0.4); }
+        .tag-purple { background: rgba(99, 102, 241, 0.2); color: var(--accent-purple); border: 1px solid rgba(99, 102, 241, 0.4); }
+        .tag-guest { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); margin-top: 15px; font-size: 0.8rem; cursor: default; }
+
+        footer {
+            background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 0; margin-top: auto; z-index: 20; position: relative;
+        }
+        .footer-content {
+            max-width: 1400px; margin: 0 auto; padding: 0 6%;
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+        }
+        .footer-links button, .footer-links a { 
+            background: none; border: none; color: var(--text-secondary); cursor: pointer; text-decoration: none;
+            margin-left: 20px; font-size: 0.9rem; transition: color 0.3s; font-family: 'Inter', sans-serif;
+        }
+        .footer-links button:hover, .footer-links a:hover { color: var(--accent); text-decoration: underline; }
+
+        /* --- VISUAL COLUMN & PHONE (Modern Android / Pixel Class) --- */
+        :root {
+            /* 1. VISUAL DIMENSIONS (Wider, Shorter Stance) */
+            /* Ratio adjusted to ~16:9 for better optical weight */
+            --phone-width: 980px;   /* Increased from 860px */
+            --phone-height: 1700px; /* Adjusted for proportion */
+            
+            /* 2. GEOMETRY (Pixel 9 / S24 Style) */
+            --phone-radius: 58px;   /* Boxier corners */
+            --screen-radius: 44px;  /* Matching inner radius */
+            --border-thick: 16px;   /* Thinner, premium bezels */
+            --cam-size: 24px;       /* Smaller, tighter punch hole */
+            
+            /* 3. HARDWARE FINISH */
+            --frame-color: #0f172a; /* Deep matte black/blue */
+        }
+
+        .visual-column {
+            width: 50%; height: 100vh; position: sticky; top: 0;
+            display: flex; align-items: center; justify-content: center;
+            perspective: 2500px; 
+        }
+
+        .phone-wrapper {
+            width: var(--phone-width); height: var(--phone-height);
+            position: relative; transform-style: preserve-3d; will-change: transform;
+            /* Reduced scale slightly (0.42 -> 0.38) so the wider body doesn't clip */
+            transform: scale(0.38); 
+            transition: transform 0.1s ease-out;
+        }
+
+        .phone-frame {
+            width: 100%; height: 100%; 
+            border-radius: var(--phone-radius); 
+            background: #000; /* Screen bezel color */
+            
+            /* Bezel Construction */
+            box-shadow: 
+                0 0 0 4px var(--frame-color), /* Physical Frame */
+                inset 0 0 0 2px rgba(255,255,255,0.1), /* Inner Bezel Highlight */
+                50px 60px 120px rgba(0,0,0,0.6); /* Depth Shadow */
+            
+            position: relative; 
+            border: var(--border-thick) solid #000;
+        }
+        
+        /* ANDROID PUNCH-HOLE CAMERA */
+        .punch-hole {
+            position: absolute; top: 25px; left: 50%; transform: translateX(-50%);
+            width: var(--cam-size); height: var(--cam-size);
+            background: #000; border-radius: 50%; z-index: 50;
+            box-shadow: inset 0 0 6px rgba(255,255,255,0.2);
+        }
+
+        /* PIXEL BUTTON LAYOUT (Right Side) */
+        .hw-btn { 
+            position: absolute; background: var(--frame-color); 
+            right: -10px; /* Protruding right */
+            width: 6px; border-radius: 0 4px 4px 0;
+            box-shadow: -2px 0 4px rgba(0,0,0,0.3);
+        }
+        
+        /* Power Button (Above Volume on Pixel) */
+        .power { top: 220px; height: 70px; background: #475569; }
+        
+        /* Volume Rocker */
+        .vol-rocker { top: 310px; height: 110px; }
+
+        /* --- APP SCREEN CONTAINER --- */
+        .screen-container {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--app-bg); border-radius: var(--screen-radius); 
+            overflow: hidden; backface-visibility: hidden; transform: translateZ(0);
+        }
+        
+        /* Updated App View base */
+        .app-view {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; font-family: 'Inter', sans-serif;
+            background: var(--app-bg);
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0; pointer-events: none; z-index: 0;
+        }
+        .app-view.active { opacity: 1; pointer-events: all; z-index: 10; }
+
+        /* ADJUSTED HEADERS FOR PUNCH HOLE (Less height than Notch) */
+        .app-header { padding: 50px 40px 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .workout-header { padding: 50px 40px 20px; display: flex; align-items: center; gap: 20px; background: #fff; }
+        .chat-header { padding: 50px 40px 20px; display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #F3F4F6; background: #fff; }
+
+
+        /* --- SCREEN 1: FOOD TRACKER (Matches your code) --- */
+        .app-header { padding: 60px 40px 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .app-brand { display: flex; align-items: center; gap: 20px; }
+        .app-logo-small { width: 70px; height: 70px; border-radius: 50%; background: #333; }
+        .app-name { font-size: 1.1rem; font-weight: 700; color: var(--app-text); }
+        .guest-badge { background: #F3F4F6; padding: 8px 20px; border-radius: 40px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: #4B5563; font-weight: 600; }
+        .guest-dot { width: 16px; height: 16px; background: var(--app-warning); border-radius: 50%; }
+        
+        .app-content { flex: 1; overflow-y: auto; padding: 30px; background: #F9FAFB; }
+        .app-content::-webkit-scrollbar { display: none; }
+
+        .date-nav { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 40px; }
+        .nav-circle { width: 80px; height: 80px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; border: 2px solid #E5E7EB; color: var(--app-text); font-size: 1.2rem; }
+        .date-center { text-align: center; }
+        .date-title { font-weight: 700; color: var(--app-text); font-size: 1.1rem; }
+        .date-sub { color: var(--app-text-sub); font-size: 0.9rem; }
+
+        .toggle-row { display: flex; gap: 30px; margin-bottom: 50px; }
+        .toggle-btn { flex: 1; padding: 24px; border-radius: 24px; font-weight: 600; font-size: 0.9rem; text-align: center; display: flex; justify-content: center; align-items: center; gap: 15px; }
+        .toggle-outline { background: #fff; color: var(--app-primary); border: 2px solid #E5E7EB; }
+        .toggle-filled { background: var(--app-primary); color: #fff; border: 2px solid var(--app-primary); }
+
+        .progress-card { background: #fff; border-radius: 48px; padding: 40px; margin-bottom: 50px; box-shadow: 0 8px 40px rgba(0,0,0,0.05); }
+        .card-title { font-size: 1.2rem; font-weight: 700; color: var(--app-text); margin-bottom: 40px; }
+        .ring-container { position: relative; width: 320px; height: 320px; margin: 0 auto 60px; }
+        .ring-svg { transform: rotate(-90deg); width: 100%; height: 100%; }
+        .ring-bg { stroke: #F3F4F6; stroke-width: 20; fill: none; }
+        .ring-fill { stroke: var(--app-primary); stroke-width: 20; stroke-dasharray: 880; stroke-dashoffset: 880; stroke-linecap: round; fill: none; animation: fillRing 1.5s forwards ease-out; }
+        @keyframes fillRing { to { stroke-dashoffset: 600; } }
+        .ring-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .ring-num { font-size: 2.2rem; font-weight: 800; color: var(--app-text); line-height: 1; }
+        .ring-sub { font-size: 0.8rem; color: var(--app-text-sub); margin-top: 10px; }
+
+        .macro-row { display: flex; gap: 20px; margin-bottom: 50px; }
+        .macro-item { flex: 1; background: #F9FAFB; padding: 30px 20px; border-radius: 32px; text-align: center; }
+        .macro-bar { height: 8px; width: 80px; margin: 0 auto 20px; border-radius: 4px; }
+        .mb-green { background: #D1FAE5; } .mb-green div { width: 0%; height: 100%; background: var(--app-success); border-radius: 4px; }
+        .mb-yellow { background: #FEF3C7; } .mb-yellow div { width: 0%; height: 100%; background: var(--app-warning); border-radius: 4px; }
+        .mb-purple { background: #EDE9FE; } .mb-purple div { width: 0%; height: 100%; background: var(--app-purple); border-radius: 4px; }
+        .macro-val { font-weight: 700; color: var(--app-text); font-size: 1rem; display: block; margin-bottom: 5px; }
+        .macro-lbl { font-size: 0.8rem; color: var(--app-text-sub); }
+        .macro-goal { font-size: 0.7rem; color: #9CA3AF; margin-top: 5px; }
+
+        .card-footer { display: flex; justify-content: space-between; padding-top: 30px; border-top: 2px solid #F3F4F6; }
+        .footer-badge { display: flex; align-items: center; gap: 12px; font-size: 0.8rem; font-weight: 600; }
+        .fb-blue { color: var(--app-primary); }
+        .fb-purple { color: var(--app-purple); }
+
+        .log-header { margin-bottom: 40px; }
+        .log-title { font-size: 1.1rem; font-weight: 700; color: var(--app-text); margin-bottom: 10px; }
+        .log-sub { color: var(--app-text-sub); font-size: 0.9rem; }
+
+        .bottom-nav { background: #fff; border-top: 2px solid #F3F4F6; padding: 30px 40px 50px; display: flex; justify-content: space-between; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 8px; color: #9CA3AF; }
+        .nav-item.active { color: var(--app-primary); }
+        .nav-item i { font-size: 1.4rem; }
+        .nav-item span { font-size: 0.7rem; font-weight: 600; }
+
+        /* --- SCREEN 2: WORKOUT (Recreated from screenshot) --- */
+        .workout-header { padding: 60px 40px 20px; display: flex; align-items: center; gap: 20px; background: #fff; }
+        .back-btn { width: 60px; height: 60px; border-radius: 50%; background: #F3F4F6; display: flex; align-items: center; justify-content: center; color: #374151; font-size: 1.2rem; }
+        .workout-nav-title { font-size: 1.3rem; font-weight: 800; color: #000; }
+        .workout-sub { color: var(--app-text-sub); font-size: 0.9rem; }
+        
+        .workout-card { background: #fff; border-radius: 0 0 32px 32px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .badge-pill { background: #EDE9FE; color: #7C3AED; padding: 6px 16px; border-radius: 16px; font-size: 0.8rem; font-weight: 700; display: inline-block; float: right; }
+        .ex-title { font-size: 1.6rem; font-weight: 800; color: #000; margin-bottom: 20px; line-height: 1.2; clear: right; }
+        
+        .video-placeholder { 
+            height: 350px; background: #374151; border-radius: 24px; margin-bottom: 30px; position: relative; overflow: hidden;
+            background-image: url('./img/0.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .vid-overlay { position: absolute; bottom: 20px; left: 20px; background: var(--app-success); padding: 10px 20px; border-radius: 30px; color: #fff; font-weight: 600; font-size: 0.9rem; display: flex; gap: 8px; align-items: center; }
+        
+        .tag-row { display: flex; gap: 15px; margin-bottom: 30px; }
+        .tag-chip { background: #F9FAFB; padding: 15px; border-radius: 16px; font-weight: 600; font-size: 0.9rem; color: #374151; flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        
+        .set-card { background: #fff; border-radius: 32px; padding: 40px; text-align: center; border: 1px solid #F3F4F6; margin: 0 30px; }
+        .timer-circle { 
+            width: 200px; height: 200px; border-radius: 50%; border: 12px solid #E5E7EB; border-top-color: var(--app-success); 
+            margin: 30px auto; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .timer-val { font-size: 3.5rem; font-weight: 800; color: var(--app-success); }
+        .timer-lbl { font-size: 1rem; color: var(--app-text-sub); }
+        
+        .workout-actions { padding: 30px; display: flex; gap: 20px; }
+        .btn-ex { flex: 1; padding: 20px; border-radius: 20px; font-weight: 700; text-align: center; font-size: 1rem; }
+        .btn-ex-light { background: #F3F4F6; color: #374151; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-ex-dark { background: #D1D5DB; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+        /* --- SCREEN 3: CHATBOT (Recreated from screenshot) --- */
+        .chat-header { padding: 60px 40px 20px; display: flex; gap: 20px; align-items: center; border-bottom: 1px solid #F3F4F6; background: #fff; }
+        .chat-title { font-weight: 700; font-size: 1.2rem; color: #000; }
+        .chat-body { padding: 30px; flex: 1; overflow-y: auto; background: #fff; }
+        
+        .bot-msg { display: flex; gap: 15px; margin-bottom: 30px; }
+        .bot-avatar { width: 40px; height: 40px; background: #EFF6FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--app-primary); flex-shrink: 0; }
+        .msg-bubble { background: #fff; padding: 0; max-width: 90%; }
+        .msg-text { font-size: 1rem; color: #1F2937; line-height: 1.5; margin-bottom: 20px; }
+        .msg-list { padding-left: 0; margin-bottom: 20px; list-style: none; }
+        .msg-list li { font-size: 1rem; color: #1F2937; margin-bottom: 10px; display: flex; gap: 10px; }
+        
+        .msg-disclaimer { 
+            font-size: 0.9rem; color: #4B5563; font-style: italic; 
+            background: #FEF3C7; padding: 20px; border-radius: 16px; border: 1px solid #FDE68A; 
+            display: flex; gap: 10px; align-items: flex-start;
+        }
+        
+        .chat-footer { padding: 20px; background: #fff; border-top: 1px solid #F3F4F6; }
+        .suggestion-row { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; }
+        .suggestion-chip { 
+            padding: 10px 20px; border-radius: 30px; border: 1px solid #BFDBFE; color: var(--app-primary); 
+            font-size: 0.9rem; font-weight: 600; white-space: nowrap; background: #EFF6FF; display: flex; gap: 8px;
+        }
+        .input-box { 
+            background: #F9FAFB; padding: 15px 25px; border-radius: 40px; border: 1px solid #E5E7EB;
+            color: #9CA3AF; font-size: 1rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .send-btn { width: 40px; height: 40px; background: #D1D5DB; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; }
+
+        /* --- ANNOTATIONS --- */
+        .annotation {
+            position: absolute; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--accent);
+            color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5); pointer-events: none;
+            display: flex; align-items: center; gap: 10px;
+            transform: translateZ(50px);
+        }
+        .pulse { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 10px var(--accent); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .anno-1 { top: 300px; left: -140px; }
+        .anno-2 { top: 800px; right: -180px; }
+        .anno-3 { bottom: 400px; left: -140px; }
+
+        /* --- PARALLAX LAYERS --- */
+        .parallax-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
+        .floating-element { position: absolute; z-index: -1; transition: transform 0.05s linear; }
+        .layer-back { opacity: 0.05; filter: blur(4px); z-index: -2; }
+        .layer-mid { opacity: 0.1; filter: blur(1px); z-index: -1; }
+        .layer-front { opacity: 0.15; filter: blur(0px); z-index: 0; }
+
+        /* --- MODALS --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(5px); }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content { background: #1e293b; width: 90%; max-width: 500px; max-height: 85vh; padding: 40px; border-radius: 24px; text-align: center; border: 1px solid #334155; transform: translateY(20px); transition: transform 0.3s ease; overflow-y: auto; position: relative; }
+        .modal-content.legal { max-width: 800px; text-align: left; }
+        .modal-content.legal h2 { margin-top: 20px; font-size: 1.5rem; color: var(--accent); }
+        .modal-content.legal p, .modal-content.legal ul { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px; }
+        .modal-content.legal ul { margin-left: 20px; }
+        .modal-overlay.active .modal-content { transform: translateY(0); }
+        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .qr-placeholder { background: #fff; padding: 10px; border-radius: 12px; margin: 20px auto; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; }
+        .qr-img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 968px) {
+            .container { display: block; }
+            .content-column { width: 100%; padding: 60px 20px 40px; }
+            .visual-column { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; opacity: 0.1; pointer-events: none; }
+            .phone-wrapper { transform: scale(0.25); } 
+            .annotation, .parallax-wrapper, .bg-blobs { display: none !important; }
+            .footer-content { flex-direction: column; text-align: center; }
+            .footer-links button, .footer-links a { margin: 0 10px; display: inline-block; }
+            .btn { flex: 1 1 100%; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="bg-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
+
+<div class="modal-overlay" id="iosModal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal('iosModal')">&times;</button>
+        <h2>iOS Beta Access</h2>
+        <p>Scan via Expo Go to test on iPhone.</p>
+        <div class="qr-placeholder"><img src="./img/qr-code.jpg" alt="Expo QR Code" class="qr-img"></div>
+        <a href="https://apps.apple.com/us/app/expo-go/id982107779" style="color:var(--accent)">1. Get Expo Go App &rarr;</a>
+    </div>
+</div>
+<div class="modal-overlay" id="termsModal">
+    <div class="modal-content legal">
+        <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
+        <h1>Terms of Service</h1><p>Last Updated: January 17, 2026</p><h2>1. Acceptance</h2><p>By using this app, you agree to these terms.</p>
+    </div>
+</div>
+<div class="modal-overlay" id="privacyModal">
+    <div class="modal-content legal">
+        <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
+        <h1>Privacy Policy</h1><p>Last Updated: January 17, 2026</p><h2>1. Data</h2><p>We collect personal info securely.</p>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div class="parallax-wrapper">
+        <div class="floating-element layer-back" data-speed="0.1" style="top: 10%; left: 5%; font-size: 3rem;">⚡️</div>
+        <div class="floating-element layer-back" data-speed="0.15" style="top: 30%; left: 85%; font-size: 4rem;">🧬</div>
+        <div class="floating-element layer-mid" data-speed="0.3" style="top: 20%; left: 70%; font-size: 4rem;">💪</div>
+        <div class="floating-element layer-mid" data-speed="0.35" style="top: 50%; left: 10%; font-size: 3.5rem;">🥗</div>
+        <div class="floating-element layer-front" data-speed="0.6" style="top: 15%; left: 85%; font-size: 5rem;">🏃</div>
+    </div>
+
+    <div class="content-column">
+        
+        <section id="hero">
+            <img src="./img/fit-fusion-logo.png" alt="FitFusion Logo" class="logo-img">
+            <h1>Fitness, <br>Evolved.</h1>
+            <div class="value-matrix">
+                <div class="vm-item"><span class="vm-label">INPUT</span><span>Your Goals & Data</span></div>
+                <div style="align-self:center; opacity:0.5;">&rarr;</div>
+                <div class="vm-item"><span class="vm-label">MECHANISM</span><span>Adaptive AI Logic</span></div>
+                <div style="align-self:center; opacity:0.5;">&rarr;</div>
+                <div class="vm-item"><span class="vm-label">OUTPUT</span><span>Measurable Results</span></div>
+            </div>
+            <p>The only self-help fitness app that combines clinical-grade nutrition algorithms with adaptive workout intelligence.</p>
+            <div class="trust-bar">
+                <div class="trust-item"><i class="fas fa-check-circle trust-icon"></i> Dietitian-Reviewed Algorithms</div>
+            </div>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
+                <button class="btn btn-secondary" onclick="openModal('iosModal')"><i class="fab fa-apple"></i> iOS Preview</button>
+            </div>
+            <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
+                <i class="fas fa-user-secret"></i> or <a href="#" style="color:var(--text-secondary); text-decoration: underline;">Try Guest Mode</a> (No account needed)
+            </div>
+        </section>
+
+        <section id="comparison">
+            <h2>Why Switch?</h2>
+            <div class="glass-card">
+                <table class="comparison-table">
+                    <thead><tr><th>Feature</th><th>FitFusion360</th><th>Generic Apps</th></tr></thead>
+                    <tbody>
+                        <tr><td>Adaptive Plans</td><td><i class="fas fa-check check"></i> Dynamic</td><td><i class="fas fa-times cross"></i> Static PDF</td></tr>
+                        <tr><td>Nutrition Logic</td><td><i class="fas fa-check check"></i> Clinical Algo</td><td><i class="fas fa-times cross"></i> Generic Estimates</td></tr>
+                        <tr><td>Data Privacy</td><td><i class="fas fa-check check"></i> Local-First</td><td><i class="fas fa-times cross"></i> Cloud Sold</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="workouts">
+            <div class="tag tag-blue">Adaptive Training</div>
+            <h2>Pocket Personal Trainer</h2>
+            <div class="glass-card">
+                <ul class="feature-list">
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-dumbbell"></i></div><div class="feature-text"><strong>Customized Plans</strong><span>Tailored for Weight Loss, Muscle Gain, or Endurance.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><div class="feature-text"><strong>Journey Tracking</strong><span>Daily restrictions & completion monitoring to keep you honest.</span></div></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="nutrition">
+            <div class="tag tag-purple">Clinical Nutrition</div>
+            <h2>Science, Not Guesswork</h2>
+            <div class="glass-card">
+                <ul class="feature-list">
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-calculator"></i></div><div class="feature-text"><strong>Mifflin-St Jeor Algorithm</strong><span>Evidence-based BMR & TDEE calculation.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-camera"></i></div><div class="feature-text"><strong>AI Food Vision</strong><span>Snap a photo to auto-log meals via image recognition.</span></div></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="tech">
+            <div class="tag tag-blue">Smart Tech</div>
+            <h2>Context-Aware Intelligence</h2>
+            <p>A chatbot that remembers your goals, injuries, and preferences across every conversation.</p>
+            <div class="glass-card" style="border-left: 4px solid var(--success);">
+                <h3 style="color:var(--success)">🛡️ Privacy & Security</h3>
+                <ul class="feature-list">
+                    <li class="feature-item" style="margin-bottom:5px;"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Dietitian-Reviewed</strong> Algorithms</span></li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Offline Mode</strong> with Cloud Sync</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="builder">
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
+                <h4 style="color: var(--text-secondary); margin-bottom: 10px;">Builder's Note</h4>
+                <p style="font-style: italic; font-size: 1rem; color: #fff;">"I built FitFusion360 because generic fitness apps wanted me to fail so I'd buy subscriptions. This is the tool I needed: blunt, effective, and scientifically grounded."</p>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="visual-column">
+        <div class="phone-wrapper" id="phone">
+            <div class="annotation anno-1"><div class="pulse"></div><span>Macro Floor</span></div>
+            <div class="annotation anno-2"><div class="pulse"></div><span>Context Memory</span></div>
+            <div class="annotation anno-3"><div class="pulse"></div><span>Auto-Lock</span></div>
+            
+            <div class="phone-frame">
+                <div class="punch-hole"></div>
+                <div class="hw-btn power"></div>
+                <div class="hw-btn vol-rocker"></div>
+                <div class="screen-container">
+                    
+                    <div class="app-view active" id="screen-dashboard">
+                        <div class="app-header">
+                            <div class="app-brand"><img src="./img/fit-fusion-logo.png" class="app-logo-small"><span class="app-name">Food Tracker</span></div>
+                            <div class="guest-badge"><div class="guest-dot"></div>Guest Mode</div>
+                        </div>
+                        <div class="app-content">
+                            <div class="date-nav">
+                                <button class="nav-circle"><i class="fas fa-chevron-left"></i></button>
+                                <div class="date-center"><div class="date-title">Thu, Jan 22</div><div class="date-sub">2026-01-22</div></div>
+                                <button class="nav-circle"><i class="fas fa-chevron-right"></i></button>
+                            </div>
+                            <div class="toggle-row">
+                                <button class="toggle-btn toggle-outline"><i class="far fa-calendar"></i> Today</button>
+                                <button class="toggle-btn toggle-filled"><i class="fas fa-calendar-alt"></i> Calendar</button>
+                            </div>
+                            <div class="progress-card">
+                                <div class="card-title">Daily Progress</div>
+                                <div class="ring-container">
+                                    <svg class="ring-svg"><circle class="ring-bg" cx="160" cy="160" r="140"></circle><circle class="ring-fill" cx="160" cy="160" r="140"></circle></svg>
+                                    <div class="ring-text"><span class="ring-num">0</span><span class="ring-sub">of 2171<br>calories</span></div>
+                                </div>
+                                <div class="macro-row">
+                                    <div class="macro-item"><div class="macro-bar mb-green"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Protein</span><div class="macro-goal">Goal: 154g</div></div>
+                                    <div class="macro-item"><div class="macro-bar mb-yellow"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Carbs</span><div class="macro-goal">Goal: 253g</div></div>
+                                    <div class="macro-item"><div class="macro-bar mb-purple"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Fat</span><div class="macro-goal">Goal: 60g</div></div>
+                                </div>
+                                <div class="card-footer">
+                                    <span class="footer-badge fb-blue"><i class="fas fa-flag"></i> Lose Weight</span>
+                                    <span class="footer-badge fb-purple"><i class="fas fa-chart-line"></i> Beginner Level</span>
+                                </div>
+                            </div>
+                            <div class="log-header">
+                                <div class="log-title">Log Your Meals</div>
+                                <div class="log-sub">Track what you eat to reach your goals</div>
+                            </div>
+                        </div>
+                        <div class="bottom-nav">
+                            <div class="nav-item"><i class="fas fa-home"></i><span>Home</span></div>
+                            <div class="nav-item"><i class="fas fa-dumbbell"></i><span>Workouts</span></div>
+                            <div class="nav-item active"><i class="fas fa-utensils"></i><span>Diet</span></div>
+                            <div class="nav-item"><i class="fas fa-chart-line"></i><span>Progress</span></div>
+                            <div class="nav-item"><i class="fas fa-user"></i><span>Profile</span></div>
+                        </div>
+                    </div>
+
+                    <div class="app-view" id="screen-workout">
+                        <div class="workout-header">
+                            <div class="back-btn"><i class="fas fa-arrow-left"></i></div>
+                            <div style="flex:1; text-align:center;">
+                                <div class="workout-nav-title">Day 2</div>
+                                <div class="workout-sub">0/7 exercises (0.0%)</div>
+                            </div>
+                            <div style="width:40px"></div>
+                        </div>
+                        <div class="app-content">
+                            <div class="workout-card">
+                                <span class="badge-pill">1 of 7</span>
+                                <h2 class="ex-title">Close-Grip Dumbbell Press</h2>
+                                <div class="video-placeholder">
+                                    <div class="vid-overlay"><i class="fas fa-redo"></i> Follow the movement pattern</div>
+                                </div>
+                                <div class="tag-row">
+                                    <div class="tag-chip"><i class="fas fa-sync" style="color:#7C3AED;"></i> 2 sets</div>
+                                    <div class="tag-chip"><i class="fas fa-dumbbell" style="color:#10B981;"></i> 12-15 reps</div>
+                                    <div class="tag-chip"><i class="fas fa-stopwatch" style="color:#F59E0B;"></i> 30-60s rest</div>
+                                </div>
+                            </div>
+                            <div class="set-card">
+                                <div style="font-weight:700; color:#111; margin-bottom:10px;">Set 1 of 2 • 12-15 reps</div>
+                                <div class="timer-circle">
+                                    <div class="timer-val">0:42</div>
+                                    <div class="timer-lbl">Exercise</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="workout-actions">
+                            <div class="btn-ex btn-ex-light"><i class="fas fa-eye"></i> Instructions</div>
+                            <div class="btn-ex btn-ex-dark">Finish Exercise <i class="fas fa-arrow-right"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="app-view" id="screen-chat">
+                        <div class="chat-header">
+                            <div class="back-btn"><i class="fas fa-arrow-left"></i></div>
+                            <div class="chat-title">FitFusion360 Chatbot</div>
+                        </div>
+                        <div class="chat-body">
+                            <div class="bot-msg">
+                                <div class="bot-avatar"><i class="fas fa-robot"></i></div>
+                                <div class="msg-bubble">
+                                    <div class="msg-text">👋 Hi! I'm your FitFusion360 AI coach. I'm here to help you reach your fitness goals through smart nutrition and personalized guidance.</div>
+                                    <div class="msg-text" style="font-weight:700;">What I can help with:</div>
+                                    <ul class="msg-list">
+                                        <li>🍽️ Custom meal ideas for your goals</li>
+                                        <li>📊 Nutrition tracking & analysis</li>
+                                        <li>💪 Pre/post-workout fuel strategies</li>
+                                        <li>🎯 Progress optimization tips</li>
+                                        <li>🥗 Recipes & meal prep ideas</li>
+                                    </ul>
+                                    <div class="msg-text">I already know your profile, so just ask me anything!</div>
+                                    <div class="msg-disclaimer">
+                                        <i class="fas fa-exclamation-triangle" style="color:#F59E0B;"></i>
+                                        <span><strong>Note:</strong> AI-generated advice is for informational purposes only and may contain errors. Always consult a professional.</span>
+                                    </div>
+                                    <div style="font-size:0.7rem; color:#9CA3AF; margin-top:5px; text-align:right;">10:16 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-footer">
+                            <div class="suggestion-row">
+                                <div class="suggestion-chip"><i class="fas fa-utensils"></i> Meal ideas</div>
+                                <div class="suggestion-chip"><i class="far fa-lightbulb"></i> Daily tip</div>
+                                <div class="suggestion-chip"><i class="fas fa-dumbbell"></i> Pre-workout</div>
+                            </div>
+                            <div class="input-box">
+                                <span>Ask me anything about nutrition...</span>
+                                <div class="send-btn"><i class="fas fa-paper-plane"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-content">
+        <div class="copyright">&copy; 2026 FitFusion360. All rights reserved.</div>
+        <div class="footer-links">
+            <button onclick="openModal('privacyModal')">Privacy Policy</button>
+            <button onclick="openModal('termsModal')">Terms of Service</button>
+            <a href="mailto:support@fitfusion360.com">Contact Support</a>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const phone = document.getElementById('phone');
+    const sections = document.querySelectorAll('section');
+    const elements = document.querySelectorAll('.floating-element');
+    
+    // Screens
+    const screenDashboard = document.getElementById('screen-dashboard');
+    const screenWorkout = document.getElementById('screen-workout');
+    const screenChat = document.getElementById('screen-chat');
+
+    function openModal(modalId) { document.getElementById(modalId).classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.style.overflow = 'auto'; }
+    window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.classList.remove('active'); document.body.style.overflow = 'auto'; }}
+
+    let mouseX = 0; let mouseY = 0;
+    document.addEventListener('mousemove', (e) => { mouseX = (e.clientX / window.innerWidth) * 2 - 1; mouseY = (e.clientY / window.innerHeight) * 2 - 1; });
+
+    function switchScreen(screenId) {
+        document.querySelectorAll('.app-view').forEach(el => el.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        
+        // SCROLL SPY
+        const workoutsTop = document.getElementById('workouts').offsetTop - 400;
+        const techTop = document.getElementById('tech').offsetTop - 400;
+        
+        if (scrollY < workoutsTop) { switchScreen('screen-dashboard'); } 
+        else if (scrollY >= workoutsTop && scrollY < techTop) { switchScreen('screen-workout'); } 
+        else { switchScreen('screen-chat'); }
+
+        // 3D ROTATION
+        if (window.innerWidth > 968) {
+            const scrollRotateY = -10 + (scrollY * 0.02);
+            const mouseTiltY = mouseX * 5; 
+            const totalY = Math.max(-25, Math.min(25, scrollRotateY + mouseTiltY));
+            phone.style.transform = `scale(0.38) rotateY(${totalY}deg)`;
+            elements.forEach((el) => {
+                const speed = parseFloat(el.getAttribute('data-speed'));
+                const yPos = scrollY * speed;
+                const rot = scrollY * 0.02;
+                el.style.transform = `translateY(${yPos}px) rotate(${rot}deg)`;
+            });
+        }
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    sections.forEach(section => observer.observe(section));
+</script>
+</body>
+</html>
