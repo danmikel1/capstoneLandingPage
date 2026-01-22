@@ -453,13 +453,13 @@
 <div class="modal-overlay" id="termsModal">
     <div class="modal-content legal">
         <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
-        <h1>Terms of Service</h1><p>Last Updated: January 17, 2026</p><h2>1. Acceptance</h2><p>By using this app, you agree to these terms.</p>
+        <iframe src="terms.html" style="width:100%; height:100%; border:none;"></iframe>
     </div>
 </div>
 <div class="modal-overlay" id="privacyModal">
     <div class="modal-content legal">
         <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
-        <h1>Privacy Policy</h1><p>Last Updated: January 17, 2026</p><h2>1. Data</h2><p>We collect personal info securely.</p>
+        <iframe src="privacy.html" style="width:100%; height:100%; border:none;"></iframe>
     </div>
 </div>
 
@@ -761,5 +761,4 @@
     sections.forEach(section => observer.observe(section));
 </script>
 </body>
-
 </html>
