@@ -453,13 +453,13 @@
 <div class="modal-overlay" id="termsModal">
     <div class="modal-content legal">
         <button class="close-modal" onclick="closeModal('termsModal')">&times;</button>
-        <iframe src="terms.html" style="width:100%; height:100%; border:none;"></iframe>
+        <div id="terms-content"></div>
     </div>
 </div>
 <div class="modal-overlay" id="privacyModal">
     <div class="modal-content legal">
         <button class="close-modal" onclick="closeModal('privacyModal')">&times;</button>
-        <iframe src="privacy.html" style="width:100%; height:100%; border:none;"></iframe>
+        <div id="privacy-content"></div>
     </div>
 </div>
 
@@ -717,7 +717,29 @@
     const screenWorkout = document.getElementById('screen-workout');
     const screenChat = document.getElementById('screen-chat');
 
-    function openModal(modalId) { document.getElementById(modalId).classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function openModal(modalId) { 
+        document.getElementById(modalId).classList.add('active'); 
+        document.body.style.overflow = 'hidden';
+        if (modalId === 'termsModal') {
+            fetch('terms.html')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const content = doc.querySelector('.legal-content');
+                    document.getElementById('terms-content').innerHTML = content ? content.innerHTML : html;
+                });
+        } else if (modalId === 'privacyModal') {
+            fetch('privacy.html')
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const content = doc.querySelector('.legal-content');
+                    document.getElementById('privacy-content').innerHTML = content ? content.innerHTML : html;
+                });
+        }
+    }
     function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.style.overflow = 'auto'; }
     window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.classList.remove('active'); document.body.style.overflow = 'auto'; }}
 
