@@ -175,8 +175,8 @@
         :root {
             /* 1. VISUAL DIMENSIONS (Wider, Shorter Stance) */
             /* Ratio adjusted to ~16:9 for better optical weight */
-            --phone-width: 980px;   /* Increased from 860px */
-            --phone-height: 1700px; /* Adjusted for proportion */
+            --phone-width: 1200px;   /* Increased from 860px */
+            --phone-height: 1500px; /* Adjusted for proportion */
             
             /* 2. GEOMETRY (Pixel 9 / S24 Style) */
             --phone-radius: 58px;   /* Boxier corners */
@@ -197,8 +197,8 @@
         .phone-wrapper {
             width: var(--phone-width); height: var(--phone-height);
             position: relative; transform-style: preserve-3d; will-change: transform;
-            /* Reduced scale slightly (0.42 -> 0.38) so the wider body doesn't clip */
-            transform: scale(0.38); 
+            /* Scale set to 0.5 for better clarity */
+            transform: scale(0.5); 
             transition: transform 0.1s ease-out;
         }
 
@@ -253,6 +253,8 @@
             background: var(--app-bg);
             transition: opacity 0.5s ease-in-out;
             opacity: 0; pointer-events: none; z-index: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
         .app-view.active { opacity: 1; pointer-events: all; z-index: 10; }
 
@@ -265,7 +267,7 @@
         /* --- SCREEN 1: FOOD TRACKER (Matches your code) --- */
         .app-header { padding: 60px 40px 20px; display: flex; justify-content: space-between; align-items: center; background: #fff; }
         .app-brand { display: flex; align-items: center; gap: 20px; }
-        .app-logo-small { width: 70px; height: 70px; border-radius: 50%; background: #333; }
+        .app-logo-small { width: 70px; height: 70px; border-radius: 50%; background: #333; image-rendering: crisp-edges; }
         .app-name { font-size: 1.1rem; font-weight: 700; color: var(--app-text); }
         .guest-badge { background: #F3F4F6; padding: 8px 20px; border-radius: 40px; display: flex; align-items: center; gap: 10px; font-size: 0.8rem; color: #4B5563; font-weight: 600; }
         .guest-dot { width: 16px; height: 16px; background: var(--app-warning); border-radius: 50%; }
@@ -336,6 +338,7 @@
             background-size: cover;
             background-position: center;
             display: flex; align-items: center; justify-content: center;
+            image-rendering: crisp-edges;
         }
         .vid-overlay { position: absolute; bottom: 20px; left: 20px; background: var(--app-success); padding: 10px 20px; border-radius: 30px; color: #fff; font-weight: 600; font-size: 0.9rem; display: flex; gap: 8px; align-items: center; }
         
@@ -402,7 +405,7 @@
 
         /* --- PARALLAX LAYERS --- */
         .parallax-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 0; }
-        .floating-element { position: absolute; z-index: -1; transition: transform 0.05s linear; }
+        .floating-element { position: absolute; z-index: -1; }
         .layer-back { opacity: 0.05; filter: blur(4px); z-index: -2; }
         .layer-mid { opacity: 0.1; filter: blur(1px); z-index: -1; }
         .layer-front { opacity: 0.15; filter: blur(0px); z-index: 0; }
@@ -424,12 +427,15 @@
         @media (max-width: 968px) {
             .container { display: block; }
             .content-column { width: 100%; padding: 60px 20px 40px; }
-            .visual-column { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: -1; opacity: 0.1; pointer-events: none; }
-            .phone-wrapper { transform: scale(0.25); } 
+            .visual-column { display: none; }
             .annotation, .parallax-wrapper, .bg-blobs { display: none !important; }
             .footer-content { flex-direction: column; text-align: center; }
             .footer-links button, .footer-links a { margin: 0 10px; display: inline-block; }
             .btn { flex: 1 1 100%; margin-bottom: 10px; }
+        }
+
+        @media (max-width: 1200px) and (min-width: 969px) {
+            .phone-wrapper { transform: scale(0.4); }
         }
     </style>
 </head>
@@ -490,7 +496,7 @@
                 <div class="trust-item"><i class="fas fa-check-circle trust-icon"></i> Dietitian-Reviewed Algorithms</div>
             </div>
             <div class="btn-group">
-                <a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v0.1.1/FitFusion360.apk" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
+                <a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v0.1.0/FitFusion360.apk" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
                 <button class="btn btn-secondary" onclick="openModal('iosModal')"><i class="fab fa-apple"></i> iOS Preview</button>
             </div>
             <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
@@ -751,29 +757,34 @@
         document.getElementById(screenId).classList.add('active');
     }
 
+    let ticking = false;
     window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY;
-        
-        // SCROLL SPY
-        const workoutsTop = document.getElementById('workouts').offsetTop - 400;
-        const techTop = document.getElementById('tech').offsetTop - 400;
-        
-        if (scrollY < workoutsTop) { switchScreen('screen-dashboard'); } 
-        else if (scrollY >= workoutsTop && scrollY < techTop) { switchScreen('screen-workout'); } 
-        else { switchScreen('screen-chat'); }
+        if (!ticking) {
+            requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                
+                // SCROLL SPY
+                const workoutsTop = document.getElementById('workouts').offsetTop - 400;
+                const techTop = document.getElementById('tech').offsetTop - 400;
+                
+                if (scrollY < workoutsTop) { switchScreen('screen-dashboard'); } 
+                else if (scrollY >= workoutsTop && scrollY < techTop) { switchScreen('screen-workout'); } 
+                else { switchScreen('screen-chat'); }
 
-        // 3D ROTATION
-        if (window.innerWidth > 968) {
-            const scrollRotateY = -10 + (scrollY * 0.02);
-            const mouseTiltY = mouseX * 5; 
-            const totalY = Math.max(-25, Math.min(25, scrollRotateY + mouseTiltY));
-            phone.style.transform = `scale(0.38) rotateY(${totalY}deg)`;
-            elements.forEach((el) => {
-                const speed = parseFloat(el.getAttribute('data-speed'));
-                const yPos = scrollY * speed;
-                const rot = scrollY * 0.02;
-                el.style.transform = `translateY(${yPos}px) rotate(${rot}deg)`;
+                // 3D ROTATION - Removed rotation, keep scale and screen switching
+                if (window.innerWidth > 968) {
+                    const scale = window.innerWidth > 1200 ? 0.5 : 0.4;
+                    phone.style.transform = `scale(${scale})`;
+                    elements.forEach((el) => {
+                        const speed = parseFloat(el.getAttribute('data-speed'));
+                        const yPos = scrollY * speed;
+                        const rot = scrollY * 0.02;
+                        el.style.transform = `translateY(${yPos}px) rotate(${rot}deg)`;
+                    });
+                }
+                ticking = false;
             });
+            ticking = true;
         }
     });
 
@@ -784,4 +795,3 @@
 </script>
 </body>
 </html>
-
