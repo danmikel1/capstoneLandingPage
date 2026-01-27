@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <link rel="icon" href="./img/fit-fusion-logo.png" type="image/png">
     
     <style>
@@ -88,7 +89,8 @@
         }
         section.visible { opacity: 1; transform: translateY(0); }
 
-        .logo-img { width: 140px; margin-bottom: 2rem; filter: drop-shadow(0 0 25px rgba(6,182,212,0.6)); }
+        .logo-img { width: 140px; margin-bottom: 0; filter: drop-shadow(0 0 25px rgba(6,182,212,0.6)); }
+        .logo-container { display: flex; align-items: center; gap: 20px; margin-bottom: 2rem; }
         
         .glass-card {
             background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px);
@@ -157,19 +159,41 @@
         .tag-purple { background: rgba(99, 102, 241, 0.2); color: var(--accent-purple); border: 1px solid rgba(99, 102, 241, 0.4); }
         .tag-guest { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid var(--success); margin-top: 15px; font-size: 0.8rem; cursor: default; }
 
+        /* --- FOOTER --- */
         footer {
             background: rgba(15, 23, 42, 0.95); border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 40px 0; margin-top: auto; z-index: 20; position: relative;
+            padding: 60px 0 30px; margin-top: auto; z-index: 20; position: relative;
         }
         .footer-content {
             max-width: 1400px; margin: 0 auto; padding: 0 6%;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
+            display: flex; flex-direction: column; gap: 40px;
         }
-        .footer-links button, .footer-links a { 
+        .footer-links {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;
+        }
+        .footer-section h3 { 
+            color: var(--accent); font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; 
+            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .footer-section ul { list-style: none; }
+        .footer-section li { margin-bottom: 10px; }
+        .footer-section a, .footer-section button { 
             background: none; border: none; color: var(--text-secondary); cursor: pointer; text-decoration: none;
-            margin-left: 20px; font-size: 0.9rem; transition: color 0.3s; font-family: 'Inter', sans-serif;
+            font-size: 0.9rem; transition: color 0.3s; font-family: 'Inter', sans-serif;
         }
-        .footer-links button:hover, .footer-links a:hover { color: var(--accent); text-decoration: underline; }
+        .footer-section a:hover, .footer-section button:hover { color: var(--accent); text-decoration: underline; }
+        .powered-by { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .powered-item { 
+            display: flex; align-items: center; gap: 15px; padding: 15px; 
+            background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .powered-icon { font-size: 1.5rem; color: var(--accent); }
+        .powered-text strong { color: #fff; display: block; font-size: 0.9rem; }
+        .powered-text span { font-size: 0.8rem; color: var(--text-secondary); }
+        .copyright { 
+            text-align: center; margin-top: 40px; padding-top: 20px; 
+            border-top: 1px solid rgba(255,255,255,0.1); color: var(--text-secondary); font-size: 0.9rem;
+        }
 
         /* --- VISUAL COLUMN & PHONE (Modern Android / Pixel Class) --- */
         :root {
@@ -181,7 +205,7 @@
             /* 2. GEOMETRY (Pixel 9 / S24 Style) */
             --phone-radius: 58px;   /* Boxier corners */
             --screen-radius: 44px;  /* Matching inner radius */
-            --border-thick: 16px;   /* Thinner, premium bezels */
+            --border-thick: 16px;  /* Thinner, premium bezels */
             --cam-size: 24px;       /* Smaller, tighter punch hole */
             
             /* 3. HARDWARE FINISH */
@@ -253,8 +277,6 @@
             background: var(--app-bg);
             transition: opacity 0.5s ease-in-out;
             opacity: 0; pointer-events: none; z-index: 0;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         .app-view.active { opacity: 1; pointer-events: all; z-index: 10; }
 
@@ -418,10 +440,20 @@
         .modal-content.legal h2 { margin-top: 20px; font-size: 1.5rem; color: var(--accent); }
         .modal-content.legal p, .modal-content.legal ul { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 15px; }
         .modal-content.legal ul { margin-left: 20px; }
+        .faq-section h3 { color: var(--accent); font-size: 1.1rem; margin-top: 20px; margin-bottom: 10px; }
+        .faq-section p { margin-bottom: 15px; }
         .modal-overlay.active .modal-content { transform: translateY(0); }
         .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer; z-index: 10; }
         .qr-placeholder { background: #fff; padding: 10px; border-radius: 12px; margin: 20px auto; width: 180px; height: 180px; display: flex; align-items: center; justify-content: center; }
         .qr-img { width: 100%; height: 100%; object-fit: contain; }
+        #contactForm { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        #contactForm input, #contactForm textarea { 
+            padding: 12px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; 
+            background: rgba(30,41,59,0.5); color: var(--text-primary); font-size: 0.9rem;
+        }
+        #contactForm textarea { height: 120px; resize: vertical; }
+        #contactForm button { align-self: flex-start; padding: 12px 24px; }
+        #contactStatus { margin-top: 15px; font-size: 0.9rem; }
 
         /* --- RESPONSIVE --- */
         @media (max-width: 968px) {
@@ -430,8 +462,12 @@
             .visual-column { display: none; }
             .annotation, .parallax-wrapper, .bg-blobs { display: none !important; }
             .footer-content { flex-direction: column; text-align: center; }
+            .footer-links { display: flex; flex-direction: column; gap: 40px; }
+            .powered-by { display: flex; flex-direction: column; gap: 15px; }
             .footer-links button, .footer-links a { margin: 0 10px; display: inline-block; }
             .btn { flex: 1 1 100%; margin-bottom: 10px; }
+            .logo-container { flex-direction: column; gap: 10px; text-align: center; }
+            .logo-img { width: 100px; margin-bottom: 0; }
         }
 
         @media (max-width: 1200px) and (min-width: 969px) {
@@ -468,6 +504,58 @@
         <div id="privacy-content"></div>
     </div>
 </div>
+<div class="modal-overlay" id="faqModal">
+    <div class="modal-content legal">
+        <button class="close-modal" onclick="closeModal('faqModal')">&times;</button>
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-section">
+            <h3>How do I create a personalized workout plan?</h3>
+            <p>Complete the fitness survey during signup to receive a customized 4-week workout program based on your goals, fitness level, and available equipment.</p>
+            
+            <h3>How accurate is the food image recognition?</h3>
+            <p>Our AI-powered food recognition uses FatSecret and Clarifai to identify foods from images, with CalorieNinja providing nutritional data. While generally accurate, we recommend verifying nutritional information for best results.</p>
+            
+            <h3>What AI technologies does this app use?</h3>
+            <p>We use Google Gemini AI for meal plan generation and our nutrition chatbot. GitHub Models serves as a fallback AI service. Clarifai and FatSecret power our food image recognition. All AI recommendations are guidance only and not medical advice.</p>
+            
+            <h3>How does the AI handle my custom allergies?</h3>
+            <p>If you add a custom allergy that the AI doesn't recognize, it will err on the side of caution and may avoid potentially related foods. Always verify meal plans if you have serious allergies.</p>
+            
+            <h3>Is my data shared with AI services?</h3>
+            <p>Yes, when using AI features, relevant data (like your health profile, dietary preferences, and chatbot messages) is sent to third-party AI services (Google Gemini, GitHub Models) to generate personalized responses. See our Privacy Policy for details.</p>
+            
+            <h3>Can I change my workout reminder time?</h3>
+            <p>Yes! Go to Profile > Notification Settings to customize your workout reminder time and notification preferences.</p>
+            
+            <h3>How do I track my progress?</h3>
+            <p>Use the Progress tab to view your workout history, nutrition logs, weight trends, and achievement statistics over time.</p>
+            
+            <h3>What if I can't complete a workout?</h3>
+            <p>You can modify exercises, skip exercises, or choose a different difficulty level. Listen to your body and adjust as needed.</p>
+            
+            <h3>Should I follow AI meal plans without consulting a doctor?</h3>
+            <p>No. AI-generated meal plans and nutrition advice are for informational purposes only. Always consult with a healthcare professional, especially if you have medical conditions, take medications, or have specific dietary needs.</p>
+            
+            <h3>How do I delete my account?</h3>
+            <p>Currently, you can sign out through Profile settings. To permanently delete your account and data, please contact our support team.</p>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="contactModal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal('contactModal')">&times;</button>
+        <h2>Contact Support</h2>
+        <p>Send us a message and we'll get back to you within 24-48 hours.</p>
+        <form id="contactForm">
+            <input type="text" id="contactName" placeholder="Your Name" required>
+            <input type="email" id="contactEmail" placeholder="Your Email" required>
+            <input type="text" id="contactSubject" placeholder="Subject" required>
+            <textarea id="contactMessage" placeholder="Your message..." required></textarea>
+            <button type="submit" class="btn-primary">Send Message</button>
+        </form>
+        <div id="contactStatus"></div>
+    </div>
+</div>
 
 <div class="container">
     
@@ -482,7 +570,10 @@
     <div class="content-column">
         
         <section id="hero">
-            <img src="./img/fit-fusion-logo.png" alt="FitFusion Logo" class="logo-img">
+            <div class="logo-container">
+                <img src="./img/fit-fusion-logo.png" alt="FitFusion Logo" class="logo-img">
+                <span class="app-name" style="font-size: clamp(3rem, 5vw, 4.5rem); background: linear-gradient(135deg, #fff 0%, #cbd5e1 50%, #06b6d4 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; font-family: 'Oswald', sans-serif;">FitFusion360</span>
+            </div>
             <h1>Fitness, <br>Evolved.</h1>
             <div class="value-matrix">
                 <div class="vm-item"><span class="vm-label">INPUT</span><span>Your Goals & Data</span></div>
@@ -491,9 +582,10 @@
                 <div style="align-self:center; opacity:0.5;">&rarr;</div>
                 <div class="vm-item"><span class="vm-label">OUTPUT</span><span>Measurable Results</span></div>
             </div>
-            <p>The only self-help fitness app that combines clinical-grade nutrition algorithms with adaptive workout intelligence.</p>
+            <p>The only self-help fitness app that combines clinical-grade nutrition algorithms with adaptive workout intelligence. Backed by 12+ peer-reviewed studies including Mifflin-St Jeor BMR formula and ISSN protein guidelines.</p>
             <div class="trust-bar">
                 <div class="trust-item"><i class="fas fa-check-circle trust-icon"></i> Dietitian-Reviewed Algorithms</div>
+                <div class="trust-item"><i class="fas fa-check-circle trust-icon"></i> 12+ Scientific Citations</div>
             </div>
             <div class="btn-group">
                 <a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v.1.2.1/FitFusion360.apk" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
@@ -505,14 +597,16 @@
         </section>
 
         <section id="comparison">
-            <h2>Why Switch?</h2>
+            <h2>Why Switch to FitFusion360?</h2>
             <div class="glass-card">
                 <table class="comparison-table">
                     <thead><tr><th>Feature</th><th>FitFusion360</th><th>Generic Apps</th></tr></thead>
                     <tbody>
-                        <tr><td>Adaptive Plans</td><td><i class="fas fa-check check"></i> Dynamic</td><td><i class="fas fa-times cross"></i> Static PDF</td></tr>
-                        <tr><td>Nutrition Logic</td><td><i class="fas fa-check check"></i> Clinical Algo</td><td><i class="fas fa-times cross"></i> Generic Estimates</td></tr>
-                        <tr><td>Data Privacy</td><td><i class="fas fa-check check"></i> Local-First</td><td><i class="fas fa-times cross"></i> Cloud Sold</td></tr>
+                        <tr><td>Adaptive Plans</td><td><i class="fas fa-check check"></i> Dynamic 28-day programs</td><td><i class="fas fa-times cross"></i> Static PDF</td></tr>
+                        <tr><td>Nutrition Logic</td><td><i class="fas fa-check check"></i> Clinical Mifflin-St Jeor BMR</td><td><i class="fas fa-times cross"></i> Generic Estimates</td></tr>
+                        <tr><td>Data Privacy</td><td><i class="fas fa-check check"></i> Local-First with Offline Mode</td><td><i class="fas fa-times cross"></i> Cloud Sold</td></tr>
+                        <tr><td>AI Features</td><td><i class="fas fa-check check"></i> Gemini Vision + Chatbot</td><td><i class="fas fa-times cross"></i> Basic Calculators</td></tr>
+                        <tr><td>Progress Tracking</td><td><i class="fas fa-check check"></i> Real-time Firebase Sync</td><td><i class="fas fa-times cross"></i> Manual Logging</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -523,8 +617,9 @@
             <h2>Pocket Personal Trainer</h2>
             <div class="glass-card">
                 <ul class="feature-list">
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-dumbbell"></i></div><div class="feature-text"><strong>Customized Plans</strong><span>Tailored for Weight Loss, Muscle Gain, or Endurance.</span></div></li>
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><div class="feature-text"><strong>Journey Tracking</strong><span>Daily restrictions & completion monitoring to keep you honest.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-dumbbell"></i></div><div class="feature-text"><strong>Customized Plans</strong><span>Tailored 28-day journey with split-based training (Full Body, Upper/Lower, PPL, Push/Pull/Legs) for Weight Loss, Muscle Gain, Strength, Endurance, or Flexibility goals.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-chart-line"></i></div><div class="feature-text"><strong>Journey Tracking</strong><span>Daily restrictions ensure accountability - complete ONE workout per day with progress monitoring across weeks. Unlocks sequentially for optimal progression.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-clock"></i></div><div class="feature-text"><strong>Smart Notifications</strong><span>Local workout reminders based on your preferred schedule. Android HIGH importance channel for reliable delivery.</span></div></li>
                 </ul>
             </div>
         </section>
@@ -534,8 +629,11 @@
             <h2>Science, Not Guesswork</h2>
             <div class="glass-card">
                 <ul class="feature-list">
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-calculator"></i></div><div class="feature-text"><strong>Mifflin-St Jeor Algorithm</strong><span>Evidence-based BMR & TDEE calculation.</span></div></li>
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-camera"></i></div><div class="feature-text"><strong>AI Food Vision</strong><span>Snap a photo to auto-log meals via image recognition.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-calculator"></i></div><div class="feature-text"><strong>Mifflin-St Jeor BMR Algorithm</strong><span>Evidence-based BMR calculation (most accurate for healthy adults per Frankenfield et al., 2005) combined with activity multipliers from Institute of Medicine PAL values.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-utensils"></i></div><div class="feature-text"><strong>ISSN Protein Guidelines</strong><span>Goal-based protein targets (1.4-2.5 g/kg) following International Society of Sports Nutrition Position Stand (Jäger et al., 2017) for optimal muscle preservation and growth.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-camera"></i></div><div class="feature-text"><strong>AI Food Vision</strong><span>Snap a photo to auto-log meals via Gemini Vision API. Compact prompts under 20KB limit with fallback nutrition for common foods like chicken, rice, eggs.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-robot"></i></div><div class="feature-text"><strong>Context-Aware AI Chatbot</strong><span>Gemini-powered nutrition coach remembers your profile, goals, and conversation history. Provides personalized meal ideas and progress optimization without recommending competitors.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><strong>Safety Mechanisms</strong><span>Minimum calorie floor (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on Hall (2008) deficit requirements and Slater et al. (2019) surplus guidelines.</span></div></li>
                 </ul>
             </div>
         </section>
@@ -543,12 +641,14 @@
         <section id="tech">
             <div class="tag tag-blue">Smart Tech</div>
             <h2>Context-Aware Intelligence</h2>
-            <p>A chatbot that remembers your goals, injuries, and preferences across every conversation.</p>
+            <p>A chatbot that remembers your goals, injuries, and preferences across every conversation. Built with Firebase real-time sync and offline-first architecture.</p>
             <div class="glass-card" style="border-left: 4px solid var(--success);">
                 <h3 style="color:var(--success)">🛡️ Privacy & Security</h3>
                 <ul class="feature-list">
-                    <li class="feature-item" style="margin-bottom:5px;"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Dietitian-Reviewed</strong> Algorithms</span></li>
-                    <li class="feature-item"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Offline Mode</strong> with Cloud Sync</span></li>
+                    <li class="feature-item" style="margin-bottom:5px;"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Dietitian-Reviewed</strong> Algorithms with 12+ citations</span></li>
+                    <li class="feature-item" style="margin-bottom:5px;"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Offline Mode</strong> with Cloud Sync for uninterrupted tracking</span></li>
+                    <li class="feature-item" style="margin-bottom:5px;"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>Guest Mode</strong> for testing without account creation</span></li>
+                    <li class="feature-item"><i class="fas fa-check-circle" style="color:var(--success); margin-top:4px;"></i><span style="color:#ccc; font-size:0.95rem;"><strong>OTP Email Security</strong> for account changes with EmailJS integration</span></li>
                 </ul>
             </div>
         </section>
@@ -556,7 +656,7 @@
         <section id="builder">
             <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
                 <h4 style="color: var(--text-secondary); margin-bottom: 10px;">Builder's Note</h4>
-                <p style="font-style: italic; font-size: 1rem; color: #fff;">"I built FitFusion360 because generic fitness apps wanted me to fail so I'd buy subscriptions. This is the tool I needed: blunt, effective, and scientifically grounded."</p>
+                <p style="font-style: italic; font-size: 1rem; color: #fff;">"We built FitFusion360 because generic fitness apps wanted users to fail so they can sell subscriptions. This is the tool everyone needs: blunt, effective, and scientifically grounded with references like Mifflin-St Jeor, ISSN protein guidelines, and Hall's energy deficit research."</p>
             </div>
         </section>
 
@@ -596,7 +696,7 @@
                                     <div class="ring-text"><span class="ring-num">0</span><span class="ring-sub">of 2171<br>calories</span></div>
                                 </div>
                                 <div class="macro-row">
-                                    <div class="macro-item"><div class="macro-bar mb-green"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Protein</span><div class="macro-goal">Goal: 154g</div></div>
+                                    <div class="macro-item"><div class="macro-bar mb-green"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Protein</span><div class="macro-goal">Goal: 154g (ISSN)</div></div>
                                     <div class="macro-item"><div class="macro-bar mb-yellow"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Carbs</span><div class="macro-goal">Goal: 253g</div></div>
                                     <div class="macro-item"><div class="macro-bar mb-purple"><div></div></div><span class="macro-val">0g</span><span class="macro-lbl">Fat</span><div class="macro-goal">Goal: 60g</div></div>
                                 </div>
@@ -704,16 +804,79 @@
 
 <footer>
     <div class="footer-content">
-        <div class="copyright">&copy; 2026 FitFusion360. All rights reserved.</div>
+        <div class="footer-section powered-by">
+            <h3>Powered by</h3>
+            <div class="powered-item">
+                <i class="fab fa-google powered-icon"></i>
+                <div class="powered-text">
+                    <strong>Google Gemini</strong>
+                    <span>AI Assistant & Vision API</span>
+                </div>
+            </div>
+            <div class="powered-item">
+                <i class="fas fa-database powered-icon"></i>
+                <div class="powered-text">
+                    <strong>Firebase</strong>
+                    <span>Real-time Backend & Sync</span>
+                </div>
+            </div>
+            <div class="powered-item">
+                <i class="fas fa-mobile-alt powered-icon"></i>
+                <div class="powered-text">
+                    <strong>Expo</strong>
+                    <span>React Native Development Platform</span>
+                </div>
+            </div>
+            <div class="powered-item">
+                <i class="fas fa-shield-alt powered-icon"></i>
+                <div class="powered-text">
+                    <strong>EmailJS</strong>
+                    <span>Secure OTP Email Service</span>
+                </div>
+            </div>
+        </div>
+        
         <div class="footer-links">
-            <button onclick="openModal('privacyModal')">Privacy Policy</button>
-            <button onclick="openModal('termsModal')">Terms of Service</button>
-            <a href="mailto:support@fitfusion360.com">Contact Support</a>
+        <div class="footer-section">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="#hero">Features</a></li>
+                <li><a href="#comparison">How It Works</a></li>
+                <li><button onclick="openModal('contactModal')">Contact Us</button></li>
+                <li><button onclick="openModal('faqModal')">FAQ</button></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Legal</h3>
+            <ul>
+                <li><button onclick="openModal('privacyModal')">Privacy Policy</button></li>
+                <li><button onclick="openModal('termsModal')">Terms of Service</button></li>
+                <li><a href="#">Cookie Policy</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3>Download</h3>
+            <ul>
+                <li><a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v.1.2.1/FitFusion360.apk"><i class="fab fa-android"></i> Download APK (Beta)</a></li>
+                <li><button onclick="openModal('iosModal')"><i class="fab fa-apple"></i> Coming Soon (iOS)</button></li>
+            </ul>
+        </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; 2026 FitFusion360. All rights reserved. Built with React Native & Expo.
         </div>
     </div>
 </footer>
 
 <script>
+    // Initialize EmailJS
+    (function() {
+        emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+    })();
+
     const phone = document.getElementById('phone');
     const sections = document.querySelectorAll('section');
     const elements = document.querySelectorAll('.floating-element');
@@ -747,7 +910,7 @@
         }
     }
     function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); document.body.style.overflow = 'auto'; }
-    window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.classList.remove('active'); document.body.style.overflow = 'auto'; }}
+    window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.classList.remove('active'); document.body.style.overflow = 'auto'; } }
 
     let mouseX = 0; let mouseY = 0;
     document.addEventListener('mousemove', (e) => { mouseX = (e.clientX / window.innerWidth) * 2 - 1; mouseY = (e.clientY / window.innerHeight) * 2 - 1; });
@@ -788,6 +951,33 @@
         }
     });
 
+    // Contact Form Handler
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const status = document.getElementById('contactStatus');
+        status.textContent = 'Sending...';
+        status.style.color = 'var(--text-secondary)';
+        
+        const templateParams = {
+            from_name: document.getElementById('contactName').value,
+            from_email: document.getElementById('contactEmail').value,
+            subject: document.getElementById('contactSubject').value,
+            message: document.getElementById('contactMessage').value,
+        };
+        
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+            .then(function(response) {
+                status.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+                status.style.color = 'var(--success)';
+                document.getElementById('contactForm').reset();
+            }, function(error) {
+                status.textContent = 'Failed to send message. Please try again or contact us directly.';
+                status.style.color = '#ef4444';
+                console.error('EmailJS error:', error);
+            });
+    });
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.15 });
@@ -795,7 +985,3 @@
 </script>
 </body>
 </html>
-
-
-
-
