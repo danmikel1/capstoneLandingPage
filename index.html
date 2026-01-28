@@ -541,21 +541,6 @@
         </div>
     </div>
 </div>
-<div class="modal-overlay" id="contactModal">
-    <div class="modal-content">
-        <button class="close-modal" onclick="closeModal('contactModal')">&times;</button>
-        <h2>Contact Support</h2>
-        <p>Send us a message and we'll get back to you within 24-48 hours.</p>
-        <form id="contactForm">
-            <input type="text" id="contactName" placeholder="Your Name" required>
-            <input type="email" id="contactEmail" placeholder="Your Email" required>
-            <input type="text" id="contactSubject" placeholder="Subject" required>
-            <textarea id="contactMessage" placeholder="Your message..." required></textarea>
-            <button type="submit" class="btn-primary">Send Message</button>
-        </form>
-        <div id="contactStatus"></div>
-    </div>
-</div>
 
 <div class="container">
     
@@ -842,7 +827,6 @@
             <ul>
                 <li><a href="#hero">Features</a></li>
                 <li><a href="#comparison">How It Works</a></li>
-                <li><button onclick="openModal('contactModal')">Contact Us</button></li>
                 <li><button onclick="openModal('faqModal')">FAQ</button></li>
             </ul>
         </div>
@@ -951,32 +935,6 @@
         }
     });
 
-    // Contact Form Handler
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const status = document.getElementById('contactStatus');
-        status.textContent = 'Sending...';
-        status.style.color = 'var(--text-secondary)';
-        
-        const templateParams = {
-            from_name: document.getElementById('contactName').value,
-            from_email: document.getElementById('contactEmail').value,
-            subject: document.getElementById('contactSubject').value,
-            message: document.getElementById('contactMessage').value,
-        };
-        
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-            .then(function(response) {
-                status.textContent = 'Message sent successfully! We\'ll get back to you soon.';
-                status.style.color = 'var(--success)';
-                document.getElementById('contactForm').reset();
-            }, function(error) {
-                status.textContent = 'Failed to send message. Please try again or contact us directly.';
-                status.style.color = '#ef4444';
-                console.error('EmailJS error:', error);
-            });
-    });
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
