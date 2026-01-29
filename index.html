@@ -473,6 +473,107 @@
         @media (max-width: 1200px) and (min-width: 969px) {
             .phone-wrapper { transform: scale(0.4); }
         }
+
+        /* --- HOVER PREVIEW (Wikipedia-style) --- */
+        .hover-card {
+            position: absolute;
+            display: none; /* Hidden by default */
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            background: rgba(30,41,59,0.96); /* Matches glass-card */
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 9999;
+            pointer-events: none; /* Prevents flicker when cursor overlaps */
+            font-family: 'Inter', sans-serif;
+            transition: transform 0.12s ease, opacity 0.12s ease;
+        }
+        .hover-card[aria-hidden="false"] { display: block; opacity: 1; }
+        .hover-card h4 {
+            color: var(--accent);
+            font-size: 0.9rem;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            text-transform: none;
+        }
+        .hover-card p {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* --- LINK COLOR SYSTEM (fixes clashing blue links) --- */
+        :root {
+            --link-color: var(--accent);
+            --link-hover: #ffffff;
+            --link-muted: var(--text-secondary);
+        }
+
+        /* Apply to in-content links only (explicitly exclude component buttons) */
+        .content-column a:not(.btn),
+        .feature-text a:not(.btn),
+        .comparison-table a:not(.btn),
+        .app-content a:not(.btn) {
+            color: var(--link-color);
+            text-decoration: underline dotted rgba(6,182,212,0.14);
+            text-underline-offset: 3px;
+            transition: color .12s ease, text-decoration-color .12s ease, filter .12s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Cite links — slightly stronger weight and accessible focus */
+        .cite-link {
+            color: var(--link-color);
+            font-weight: 700;
+            border-bottom: 1px dashed rgba(6,182,212,0.12);
+        }
+        .cite-link:visited { opacity: 0.9; color: rgba(6,182,212,0.9); }
+        .cite-link:hover,
+        .cite-link:focus {
+            color: var(--link-hover);
+            text-decoration-color: rgba(255,255,255,0.22);
+            filter: drop-shadow(0 6px 14px rgba(6,182,212,0.08));
+        }
+        .cite-link:focus-visible {
+            outline: 3px solid rgba(6,182,212,0.14);
+            outline-offset: 4px;
+            border-radius: 6px;
+        }
+
+        /* Ensure links inside the hover card inherit the accent and remain readable */
+        .hover-card a { color: var(--accent); text-decoration: underline; }
+
+        /* Explicitly preserve button color (fixes accidental overrides) */
+        .btn, .btn .fab { color: inherit; }
+        .btn-primary { color: #0f172a; }
+        .btn-secondary { color: var(--text-secondary); }
+
+        /* Conservative safeguards for other CTA/utility anchors:
+           - icon-only links, APK links, modal links, and anchors used as buttons
+           - keeps visual CTAs visible even if new link rules are added later
+        */
+        a[role="button"],
+        a[aria-label],
+        .modal-content a,
+        a[href$=".apk"],
+        .icon-link,
+        a > .fab,
+        a > .fas {
+            color: inherit;
+        }
+
+        /* Respect user preference for higher contrast */
+        @media (prefers-contrast: more) {
+            .content-column a:not(.btn), .feature-text a:not(.btn) { text-decoration: underline; }
+            .cite-link:focus-visible { outline-color: var(--accent); }
+        }
+
+        @media (max-width: 968px) {
+            .hover-card { display: none !important; } /* disable on small/touch devices */
+        }
     </style>
 </head>
 <body>
@@ -614,11 +715,11 @@
             <h2>Science, Not Guesswork</h2>
             <div class="glass-card">
                 <ul class="feature-list">
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-calculator"></i></div><div class="feature-text"><strong>Mifflin-St Jeor BMR Algorithm</strong><span>Evidence-based BMR calculation (most accurate for healthy adults per Frankenfield et al., 2005) combined with activity multipliers from Institute of Medicine PAL values.</span></div></li>
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-utensils"></i></div><div class="feature-text"><strong>ISSN Protein Guidelines</strong><span>Goal-based protein targets (1.4-2.5 g/kg) following International Society of Sports Nutrition Position Stand (Jäger et al., 2017) for optimal muscle preservation and growth.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-calculator"></i></div><div class="feature-text"><strong><a href="https://doi.org/10.1016/j.jada.2005.02.005" target="_blank" class="cite-link" data-title="Frankenfield et al. (2005) — RMR equations" data-text="Large-sample comparison showing the Mifflin–St Jeor equation most accurately predicts resting metabolic rate across BMI ranges; supports using Mifflin for clinical BMR estimates. Frankenfield, D., Roth‑Yousey, L., & Compher, C. (2005). <i>Journal of the American Dietetic Association, 105</i>(5), 775–789. https://doi.org/10.1016/j.jada.2005.02.005">Mifflin-St Jeor BMR Algorithm</a></strong><span>Evidence-based BMR calculation (most accurate for healthy adults per Frankenfield et al., 2005) combined with activity multipliers from Institute of Medicine PAL values.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-utensils"></i></div><div class="feature-text"><strong><a href="https://pubmed.ncbi.nlm.nih.gov/28642676/" target="_blank" class="cite-link" data-title="ISSN position stand (Jäger et al., 2017)" data-text="Consensus position recommending ~1.4–2.5 g/kg/day protein for active individuals with practical per‑meal and daily targets to support maintenance and hypertrophy. Jäger, R., Kerksick, C. M., Campbell, B. I., et al. (2017). <i>Journal of the International Society of Sports Nutrition, 14</i>, 20. https://doi.org/10.1186/s12970-017-0187-1">ISSN Protein Guidelines</a></strong><span>Goal-based protein targets (1.4-2.5 g/kg) following International Society of Sports Nutrition Position Stand (Jäger et al., 2017) for optimal muscle preservation and growth.</span></div></li>
                     <li class="feature-item"><div class="feature-icon"><i class="fas fa-camera"></i></div><div class="feature-text"><strong>AI Food Vision</strong><span>Snap a photo to auto-log meals via Gemini Vision API. Compact prompts under 20KB limit with fallback nutrition for common foods like chicken, rice, eggs.</span></div></li>
                     <li class="feature-item"><div class="feature-icon"><i class="fas fa-robot"></i></div><div class="feature-text"><strong>Context-Aware AI Chatbot</strong><span>Gemini-powered nutrition coach remembers your profile, goals, and conversation history. Provides personalized meal ideas and progress optimization without recommending competitors.</span></div></li>
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><strong>Safety Mechanisms</strong><span>Minimum calorie floor (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on Hall (2008) deficit requirements and Slater et al. (2019) surplus guidelines.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><strong>Safety Mechanisms</strong><span>Minimum calorie floor (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on <a href="https://doi.org/10.1038/sj.ijo.0803720" target="_blank" class="cite-link" data-title="Hall (2008) — energy-balance model" data-text="Quantitative energy‑balance model showing body-weight change follows energy imbalance with adaptive metabolic adjustments; useful for realistic deficit-to-weight-loss planning. Hall, K. D. (2008). <i>International Journal of Obesity, 32</i>(3), 573–576. https://doi.org/10.1038/sj.ijo.0803720">Hall (2008)</a> deficit requirements and <a href="https://doi.org/10.3389/fnut.2019.00131" target="_blank" class="cite-link" data-title="Slater et al. (2019) — surplus for muscle" data-text="Practical review quantifying calorie-surplus strategies (≈250–500 kcal/day) and expected lean-mass gains with athlete-focused implementation guidance. Slater, G. J., et al. (2019). <i>Frontiers in Nutrition, 6</i>, 131. https://doi.org/10.3389/fnut.2019.00131">Slater et al. (2019)</a> surplus guidelines.</span></div></li>
                 </ul>
             </div>
         </section>
@@ -940,6 +1041,90 @@
         entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
     }, { threshold: 0.15 });
     sections.forEach(section => observer.observe(section));
+
+    /* --- Citation hover-preview logic --- */
+    document.addEventListener('DOMContentLoaded', function initCitationPreviews() {
+        const previewBox = document.getElementById('citation-preview');
+        const previewTitle = document.getElementById('preview-title');
+        const previewText = document.getElementById('preview-text');
+        let activeTimeout = null;
+
+        if (!previewBox) return;
+
+        // Utility: keep preview inside viewport
+        function clampPosition(x, y) {
+            const pad = 12;
+            const rect = previewBox.getBoundingClientRect();
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+            let left = x + 15;
+            let top = y + 15;
+            if (left + rect.width + pad > vw) left = x - rect.width - 15;
+            if (left < pad) left = pad;
+            if (top + rect.height + pad > vh) top = y - rect.height - 15;
+            if (top < pad) top = pad;
+            return { left, top };
+        }
+
+        // Attach behavior to all cite-link anchors (progressive enhancement)
+        document.querySelectorAll('.cite-link').forEach(link => {
+            // show only for non-touch pointers
+            link.addEventListener('pointerenter', (e) => {
+                if (window.matchMedia('(pointer: coarse)').matches) return;
+                // populate (render HTML — APA requires <i>)
+                previewTitle.innerHTML = link.getAttribute('data-title') || '';
+                previewText.innerHTML = link.getAttribute('data-text') || '';
+                previewBox.setAttribute('aria-hidden', 'false');
+
+                const pos = clampPosition(e.pageX, e.pageY);
+                previewBox.style.left = pos.left + 'px';
+                previewBox.style.top = pos.top + 'px';
+                previewBox.style.transform = 'translateZ(60px) scale(1)';
+            });
+
+            link.addEventListener('pointermove', (e) => {
+                if (previewBox.getAttribute('aria-hidden') === 'true') return;
+                const pos = clampPosition(e.pageX, e.pageY);
+                previewBox.style.left = pos.left + 'px';
+                previewBox.style.top = pos.top + 'px';
+            });
+
+            ['pointerleave', 'blur'].forEach(evt => {
+                link.addEventListener(evt, () => {
+                    previewBox.setAttribute('aria-hidden', 'true');
+                    previewBox.style.transform = 'translateZ(0) scale(0.98)';
+                });
+            });
+
+            // make previews keyboard-accessible
+            link.addEventListener('focus', (e) => {
+                previewTitle.innerHTML = link.getAttribute('data-title') || '';
+                previewText.innerHTML = link.getAttribute('data-text') || '';
+                previewBox.setAttribute('aria-hidden', 'false');
+                const rect = link.getBoundingClientRect();
+                const pos = clampPosition(rect.right, rect.top);
+                previewBox.style.left = pos.left + 'px';
+                previewBox.style.top = pos.top + 'px';
+            });
+        });
+
+        // hide on Escape
+        document.addEventListener('keydown', (ev) => {
+            if (ev.key === 'Escape') {
+                previewBox.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        // hide when window resized
+        window.addEventListener('resize', () => previewBox.setAttribute('aria-hidden', 'true'));
+    });
+
 </script>
+
+<!-- Citation preview container (rendered by JS) -->
+<div id="citation-preview" class="hover-card" aria-hidden="true" role="dialog" aria-label="Citation preview" tabindex="-1">
+  <h4 id="preview-title"></h4>
+  <p id="preview-text"></p>
+</div>
 </body>
 </html>
