@@ -474,7 +474,7 @@
             .phone-wrapper { transform: scale(0.4); }
         }
 
-        /* --- HOVER PREVIEW (Wikipedia-style) --- */
+        /* --- Hover preview (Wikipedia-style) --- */
         .hover-card {
             position: absolute;
             display: none; /* Hidden by default */
@@ -505,7 +505,7 @@
             margin: 0;
         }
 
-        /* --- LINK COLOR SYSTEM (fixes clashing blue links) --- */
+        /* --- Link color system (fixes clashing blue links) --- */
         :root {
             --link-color: var(--accent);
             --link-hover: #ffffff;
@@ -573,6 +573,104 @@
 
         @media (max-width: 968px) {
             .hover-card { display: none !important; } /* disable on small/touch devices */
+        }
+
+        /* --- Developer section: pyramid layout + responsive (FitFusion360) --- */
+        /* Full-bleed utility so the section spans the entire viewport like the footer */
+        .full-bleed {
+            width: 100vw;
+            margin-left: calc(50% - 50vw);
+            background: transparent; /* keep same background as page unless overridden */
+            border-top: 1px solid rgba(255,255,255,0.04);
+            padding: 72px 0;
+        }
+        .dev-inner { max-width: 1400px; margin: 0 auto; padding: 0 6%; }
+
+        /* Builder's Note — centered, constrained to the dev column */
+        .builder-note {
+            max-width: 880px;
+            margin: 18px auto 28px;
+            text-align: center;
+            font-style: italic;
+            color: #fff;
+            background: rgba(255,255,255,0.02);
+            padding: 18px 22px;
+            border-radius: 12px;
+            border-left: 3px solid rgba(99,102,241,0.18);
+            box-shadow: 0 6px 18px rgba(2,6,23,0.35);
+        }
+        .builder-note h4 { color: var(--text-secondary); margin: 0 0 8px; font-size: 0.95rem; }
+        .builder-note p { margin: 0; font-size: 0.98rem; color: #e6eef6; }
+
+        /* Single-row developer grid (responsive) */
+        .dev-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            align-items: stretch;
+            grid-auto-rows: minmax(260px, 320px); /* uniform row height */
+            margin-top: 28px;
+            justify-items: center;
+        }
+
+        .dev-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 18px;
+            padding: 18px 18px 14px;
+            position: relative;
+            overflow: visible;
+            border: 1px solid rgba(255,255,255,0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* vertically center content */
+            text-align: center;
+            height: 100%; /* stretch to the grid row height */
+            width: 100%;
+            max-width: 320px;
+        }
+
+        /* Preserve five-in-row on very wide viewports */
+        @media (min-width: 1400px) {
+            .dev-grid { grid-template-columns: repeat(5, minmax(200px, 1fr)); grid-auto-rows: 320px; }
+        }
+
+        /* Small screens: center and stack */
+        @media (max-width: 520px) {
+            .dev-grid { gap: 16px; grid-template-columns: 1fr; grid-auto-rows: auto; }
+            .dev-card { max-width: 420px; height: auto; }
+        }
+        .dev-image-wrapper {
+            width: 108px;
+            height: 108px;
+            border-radius: 50%;
+            padding: 6px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(6,182,212,0.08));
+            display: grid; place-items: center; margin-bottom: 16px;
+            border: 3px solid transparent;
+        }
+        .dev-image { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.06); background: linear-gradient(135deg,#111827,#0f172a); }
+        .dev-accent-blob { position: absolute; top: -18px; right: -18px; width: 72px; height: 72px; border-radius: 50%; filter: blur(28px); opacity: 0.55; background: linear-gradient(135deg,#06b6d4,#8b5cf6); z-index: 0; }
+        .dev-name { color: #fff; margin: 6px 0 4px; font-size: 1.05rem; font-weight: 700; z-index: 2; }
+        .dev-role { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 8px; z-index: 2; font-weight: 600; }
+        .dev-bio { color: var(--text-secondary); font-size: 0.95rem; max-width: 320px; z-index: 2; }
+
+        /* Medium+ screens: enforce pyramid */
+        @media (min-width: 768px) {
+            .dev-row--top { gap: 36px; }
+            .dev-row--bottom { gap: 28px; }
+        }
+
+        /* Small screens: stack everything and center cards */
+        @media (max-width: 767px) {
+            .dev-row--top, .dev-row--bottom { display: grid; grid-template-columns: 1fr; gap: 18px; justify-items: center; }
+            .dev-card { width: 100%; max-width: 520px; }
+        }
+
+        /* Keep visual parity with earlier wide-breakpoint behavior */
+        @media (min-width: 1200px) {
+            .dev-inner { padding: 0 6%; }
+            .dev-row--top { margin-top: 6px; }
         }
     </style>
 </head>
@@ -652,6 +750,78 @@
         </div>
     </div>
 </div>
+<div class="modal-overlay" id="featuresModal">
+    <div class="modal-content legal">
+        <button class="close-modal" onclick="closeModal('featuresModal')">&times;</button>
+        <h2>FitFusion360 Features</h2>
+        <div class="faq-section">
+            <h3>Adaptive Workout Programs</h3>
+            <p>28-day personalized workout journeys with split-based training (Full Body, Upper/Lower, PPL, Push/Pull/Legs) tailored to your goals, fitness level, and equipment access. Coach-vetted for safety and progressive overload.</p>
+            
+            <h3>Clinical Nutrition Calculator</h3>
+            <p>Mifflin-St Jeor BMR algorithm with activity multipliers from Institute of Medicine PAL values. Goal-based protein targets (1.4-2.5 g/kg) following ISSN guidelines.</p>
+            
+            <h3>AI-Powered Features</h3>
+            <p>Google Gemini AI for meal plan generation and context-aware chatbot. Gemini Vision for food image recognition with fallback nutrition data.</p>
+            
+            <h3>Real-Time Progress Tracking</h3>
+            <p>Firebase-powered real-time sync of workout history, nutrition logs, weight trends, and achievements. Works offline with cloud backup.</p>
+            
+            <h3>Smart Notifications</h3>
+            <p>Local workout reminders based on your preferred schedule. Android HIGH importance channel for reliable delivery.</p>
+            
+            <h3>Safety Mechanisms</h3>
+            <p>Minimum calorie floors (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on scientific research. Guest mode for testing without accounts.</p>
+            
+            <h3>Daily Workout Restrictions</h3>
+            <p>One workout per day limit with progress tracking across weeks. Unlocks sequentially to prevent overtraining and ensure recovery.</p>
+            
+            <h3>Goal-Based Customization</h3>
+            <p>Support for Weight Loss, Muscle Gain, Strength, Endurance, and Flexibility goals with appropriate macro distributions and intensity modifiers.</p>
+            
+            <h3>Privacy-First Design</h3>
+            <p>Local-first architecture with optional cloud sync. COPPA compliant for users 13+. OTP email security for account changes.</p>
+            
+            <h3>Scientific Backing</h3>
+            <p>12+ peer-reviewed citations including Hall (2008) energy deficit research, Slater et al. (2019) surplus guidelines, and Jäger et al. (2017) protein recommendations.</p>
+            
+            <h3>Teen-Safe Features</h3>
+            <p>Parental involvement recommendations, conservative defaults, and healthcare professional consultation reminders for users 13-16.</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="howItWorksModal">
+    <div class="modal-content legal">
+        <button class="close-modal" onclick="closeModal('howItWorksModal')">&times;</button>
+        <h2>How FitFusion360 Works</h2>
+        <div class="faq-section">
+            <h3>1. Sign Up & Age Verification</h3>
+            <p>Create an account with email verification. The app requires users to be at least 13 years old (COPPA compliant). Teens: Get parental approval before starting.</p>
+            
+            <h3>2. Complete the Fitness Survey</h3>
+            <p>Answer questions about your goals (Weight Loss, Muscle Gain, Strength, etc.), fitness level (Beginner/Intermediate/Advanced), available equipment, and preferences. This generates your personalized plan.</p>
+            
+            <h3>3. Receive Your Customized Plan</h3>
+            <p>Get a 28-day workout program with split-based training (Full Body, Upper/Lower, PPL, etc.) and daily nutrition targets based on Mifflin-St Jeor BMR calculations and ISSN protein guidelines.</p>
+            
+            <h3>4. Track Your Meals Daily</h3>
+            <p>Use AI food vision to snap photos of meals (Gemini Vision API) or log manually. The app calculates macros in real-time with safety floors and caps to prevent over/under-eating.</p>
+            
+            <h3>5. Complete One Workout Per Day</h3>
+            <p>Follow your sequential workout plan. Daily restrictions ensure recovery - finish today's workout to unlock tomorrow's. Coach-vetted exercises with progressive overload.</p>
+            
+            <h3>6. Get AI Guidance & Progress Tracking</h3>
+            <p>Use the context-aware chatbot for meal ideas, optimization tips, and support. View progress charts, weight trends, and achievements synced via Firebase (offline mode available).</p>
+            
+            <h3>7. Monitor & Adjust</h3>
+            <p>Receive smart notifications for workout reminders. Review weekly progress and modify plans as needed. All data is privacy-first with optional cloud sync.</p>
+            
+            <h3>8. Achieve Your Goals Safely</h3>
+            <p>Built with scientific backing (12+ citations). Safety features include minimum calorie floors, excess intake warnings, and parental oversight for teens.</p>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     
@@ -685,7 +855,7 @@
                 <div class="trust-item"><i class="fas fa-book trust-icon"></i> 12+ Scientific Citations</div>
             </div>
             <div class="btn-group">
-                <a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v.1.2.1/FitFusion360.apk" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
+                <a href="https://github.com/danmikel1/capstoneLandingPage/releases/download/v.1.2.2/FitFusion360.apk" class="btn btn-primary"><i class="fab fa-android"></i> Download APK (Beta)</a>
                 <button class="btn btn-secondary" onclick="openModal('iosModal')"><i class="fab fa-apple"></i> iOS Preview</button>
             </div>
             <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-secondary);">
@@ -731,8 +901,15 @@
                     <li class="feature-item"><div class="feature-icon"><i class="fas fa-utensils"></i></div><div class="feature-text"><strong><a href="https://pubmed.ncbi.nlm.nih.gov/28642676/" target="_blank" class="cite-link" data-title="ISSN position stand (Jäger et al., 2017)" data-text="Consensus position recommending ~1.4–2.5 g/kg/day protein for active individuals with practical per‑meal and daily targets to support maintenance and hypertrophy. Jäger, R., Kerksick, C. M., Campbell, B. I., et al. (2017). <i>Journal of the International Society of Sports Nutrition, 14</i>, 20. https://doi.org/10.1186/s12970-017-0187-1">ISSN Protein Guidelines</a></strong><span>Goal-based protein targets (1.4-2.5 g/kg) following International Society of Sports Nutrition Position Stand (Jäger et al., 2017) for optimal muscle preservation and growth.</span></div></li>
                     <li class="feature-item"><div class="feature-icon"><i class="fas fa-camera"></i></div><div class="feature-text"><strong>AI Food Vision</strong><span>Snap a photo to auto-log meals via Gemini Vision API. Compact prompts under 20KB limit with fallback nutrition for common foods like chicken, rice, eggs.</span></div></li>
                     <li class="feature-item"><div class="feature-icon"><i class="fas fa-robot"></i></div><div class="feature-text"><strong>Context-Aware AI Chatbot</strong><span>Gemini-powered nutrition coach remembers your profile, goals, and conversation history. Provides personalized meal ideas and progress optimization without recommending competitors.</span></div></li>
-                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><strong>Safety Mechanisms</strong><span>Minimum calorie floor (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on <a href="https://doi.org/10.1038/sj.ijo.0803720" target="_blank" class="cite-link" data-title="Hall (2008) — energy-balance model" data-text="Quantitative energy‑balance model showing body-weight change follows energy imbalance with adaptive metabolic adjustments; useful for realistic deficit-to-weight-loss planning. Hall, K. D. (2008). <i>International Journal of Obesity, 32</i>(3), 573–576. https://doi.org/10.1038/sj.ijo.0803720">Hall (2008)</a> deficit requirements and <a href="https://doi.org/10.3389/fnut.2019.00131" target="_blank" class="cite-link" data-title="Slater et al. (2019) — surplus for muscle" data-text="Practical review quantifying calorie-surplus strategies (≈250–500 kcal/day) and expected lean-mass gains with athlete-focused implementation guidance. Slater, G. J., et al. (2019). <i>Frontiers in Nutrition, 6</i>, 131. https://doi.org/10.3389/fnut.2019.00131">Slater et al. (2019)</a> surplus guidelines.</span></div></li>
+                    <li class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-text"><strong>Safety Mechanisms</strong><span>Minimum calorie floor (BMR × 1.2), protein caps (140-220g), and excess intake warnings based on <a href="https://doi.org/10.1038/sj.ijo.0803720" target="_blank" class="cite-link" data-title="Hall (2008) — energy-balance model" data-text="Quantitative energy-balance model showing body-weight change follows energy imbalance with adaptive metabolic adjustments; useful for realistic deficit-to-weight-loss planning. Hall, K. D. (2008). <i>International Journal of Obesity, 32</i>(3), 573–576. https://doi.org/10.1038/sj.ijo.0803720">Hall (2008)</a> deficit requirements and <a href="https://doi.org/10.3389/fnut.2019.00131" target="_blank" class="cite-link" data-title="Slater et al. (2019) — surplus for muscle" data-text="Practical review quantifying calorie-surplus strategies (≈250–500 kcal/day) and expected lean-mass gains with athlete-focused implementation guidance. Slater, G. J., et al. (2019). <i>Frontiers in Nutrition, 6</i>, 131. https://doi.org/10.3389/fnut.2019.00131">Slater et al. (2019)</a> surplus guidelines.</span></div></li>
                 </ul>
+            </div>
+        </section>
+
+        <section id="builder">
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
+                <h4 style="color: var(--text-secondary); margin-bottom: 10px;">Builder's Note</h4>
+                <p style="font-style: italic; font-size: 1rem; color: #fff;">"We built FitFusion360 because generic fitness apps wanted users to fail so they can sell subscriptions. This is the tool everyone needs: blunt, effective, and scientifically grounded with references like Mifflin‑St Jeor, ISSN protein guidelines, and Hall's energy deficit research."</p>
             </div>
         </section>
 
@@ -751,12 +928,7 @@
             </div>
         </section>
 
-        <section id="builder">
-            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 40px;">
-                <h4 style="color: var(--text-secondary); margin-bottom: 10px;">Builder's Note</h4>
-                <p style="font-style: italic; font-size: 1rem; color: #fff;">"We built FitFusion360 because generic fitness apps wanted users to fail so they can sell subscriptions. This is the tool everyone needs: blunt, effective, and scientifically grounded with references like Mifflin-St Jeor, ISSN protein guidelines, and Hall's energy deficit research."</p>
-            </div>
-        </section>
+        <!-- developers moved below -->
 
     </div>
 
@@ -900,6 +1072,65 @@
 
 </div>
 
+<section id="developers" class="full-bleed">
+    <div class="dev-inner">
+        <div class="tag tag-purple">The Builders</div>
+        <p>Two developers and a three-person documentation team responsible for clinical, API, and user-facing docs.</p>
+
+        <div class="builder-note">
+            <h4>Builder's Note</h4>
+            <p>"We built FitFusion360 because generic fitness apps wanted users to fail so they can sell subscriptions. This is the tool everyone needs: blunt, effective, and scientifically grounded with references like Mifflin‑St Jeor, ISSN protein guidelines, and Hall's energy deficit research."</p>
+        </div>
+
+        <div class="dev-grid">
+            <div class="dev-card">
+                <div class="dev-accent-blob"></div>
+                <div class="dev-image-wrapper">
+                    <img src="./img/sean.jpeg" alt="Asha Reddy — Lead Developer" class="dev-image">
+                </div>
+                <h3 class="dev-name">Sean</h3>
+                <div class="dev-role">Developer</div>
+            </div>
+
+            <div class="dev-card">
+                <div class="dev-accent-blob" style="background: var(--accent-purple);"></div>
+                <div class="dev-image-wrapper">
+                    <img src="./img/dan.jpg" alt="Mateo Vargas — AI Developer" class="dev-image" style="border-color: var(--accent-purple);">
+                </div>
+                <h3 class="dev-name">Dan</h3>
+                <div class="dev-role">Developer</div>
+            </div>
+
+            <div class="dev-card">
+                <div class="dev-accent-blob"></div>
+                <div class="dev-image-wrapper">
+                    <img src="./img/ash.jpg" alt="Lina Cho — Technical Writer" class="dev-image">
+                </div>
+                <h3 class="dev-name">Alyssa</h3>
+                <div class="dev-role">Technical Writer</div>
+            </div>
+
+            <div class="dev-card">
+                <div class="dev-accent-blob" style="background: var(--accent-purple);"></div>
+                <div class="dev-image-wrapper">
+                    <img src="./img/biboy.jpg" alt="Omar Ibrahim — API Documentation" class="dev-image" style="border-color: var(--accent-purple);">
+                </div>
+                <h3 class="dev-name">Biboy</h3>
+                <div class="dev-role">Technical Writer</div>
+            </div>
+
+            <div class="dev-card">
+                <div class="dev-accent-blob"></div>
+                <div class="dev-image-wrapper">
+                    <img src="./img/roque.jpg" alt="Priya Nair — Clinical Documentation Lead" class="dev-image">
+                </div>
+                <h3 class="dev-name">Roque</h3>
+                <div class="dev-role">Technical Writer</div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <footer>
     <div class="footer-content">
         <div class="footer-section powered-by">
@@ -938,8 +1169,8 @@
         <div class="footer-section">
             <h3>Quick Links</h3>
             <ul>
-                <li><a href="#hero">Features</a></li>
-                <li><a href="#comparison">How It Works</a></li>
+                <li><button onclick="openModal('featuresModal')">Features</button></li>
+                <li><button onclick="openModal('howItWorksModal')">How It Works</button></li>
                 <li><button onclick="openModal('faqModal')">FAQ</button></li>
             </ul>
         </div>
